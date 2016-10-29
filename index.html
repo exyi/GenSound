@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+</head>
+<body>
+    <h1>GenSound</h1>
+
+    <div class="content">
+    </div>
+
+  <!--<script src="node_modules/core-js/client/core.min.js"></script>-->
+  <script src="node_modules/requirejs/require.js"></script>
+  <script src="scripts/inc/shim/Base64.js" type="text/javascript"></script>
+	<script src="scripts/inc/shim/Base64binary.js" type="text/javascript"></script>
+	<script src="scripts/inc/shim/WebAudioAPI.js" type="text/javascript"></script>
+	<script src="scripts/inc/shim/WebMIDIAPI.js" type="text/javascript"></script>
+	<!-- jasmid package -->
+	<script src="scripts/inc/jasmid/stream.js"></script>
+	<script src="scripts/inc/jasmid/midifile.js"></script>
+	<script src="scripts/inc/jasmid/replayer.js"></script>
+	<!-- midi.js package -->
+	<script src="scripts/midi/audioDetect.js" type="text/javascript"></script>
+	<script src="scripts/midi/gm.js" type="text/javascript"></script>
+	<script src="scripts/midi/loader.js" type="text/javascript"></script>
+	<script src="scripts/midi/plugin.audiotag.js" type="text/javascript"></script>
+	<script src="scripts/midi/plugin.webaudio.js" type="text/javascript"></script>
+	<script src="scripts/midi/plugin.webmidi.js" type="text/javascript"></script>
+	<script src="scripts/midi/player.js" type="text/javascript"></script>
+	<script src="scripts/midi/synesthesia.js" type="text/javascript"></script>
+	<!-- utils -->
+	<script src="scripts/util/dom_request_xhr.js" type="text/javascript"></script>
+	<script src="scripts/util/dom_request_script.js" type="text/javascript"></script>
+	<!-- includes -->
+	<script src="scripts/inc/timer.js" type="text/javascript"></script>
+	<script src="scripts/inc/colorspace.js" type="text/javascript"></script>
+	<script src="scripts/inc/event.js" type="text/javascript"></script>
+
+  <script>
+    requirejs.config({
+        // Set the baseUrl to the path of the compiled JS code
+        baseUrl: 'scripts',
+        paths: {
+            // Explicit path to core lib (relative to baseUrl, omit .js)
+            'fable-core': '../node_modules/fable-core/fable-core.min'
+        }
+    });
+    // Load the entry file of the app (use array, omit .js)
+    requirejs(["JsPlayer"]);
+  </script>
+</body>
+</html>

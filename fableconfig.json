@@ -1,0 +1,10 @@
+{
+	"module": "amd",
+	"projFile": "GenSound/GenSound.fsproj",
+	"sourceMaps": true,
+	"outDir": "scripts",
+	"scripts": {
+		"prebuild": "npm install"
+	}
+}
+

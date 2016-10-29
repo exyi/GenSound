@@ -1,0 +1,13 @@
+{
+	"license": "MIT",
+	"private": true,
+	"description": "",
+	"repository": {
+		"type": "git",
+		"url": ""
+	},
+	"dependencies": {
+		"requirejs": "*",
+		"fable-core": "*"
+	}
+}

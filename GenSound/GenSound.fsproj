@@ -38,6 +38,15 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Fable.Compiler">
+      <HintPath>..\FableBin\Fable.Compiler.dll</HintPath>
+    </Reference>
+    <Reference Include="Fable.Core">
+      <HintPath>..\FableBin\Fable.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Fable.Import">
+      <HintPath>..\FableBin\Fable.Import.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core, Version=$(TargetFSharpCoreVersion), Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <Private>True</Private>
@@ -48,8 +57,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Program.fs" />
     <None Include="App.config" />
+    <Compile Include="GenSoundCore.fs" />
+    <Compile Include="JsPlayer.fs" />
+    <Compile Include="Program.fs" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
