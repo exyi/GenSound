@@ -2,13 +2,15 @@ define(["exports", "fable-core"], function (exports, _fableCore) {
     "use strict";
 
     exports.__esModule = true;
-    exports.x = exports.melody = exports.cMinor = exports.cMajor = exports.rythm = exports.scaleSettings = exports.ScaleSettings = exports.random = undefined;
+    exports.x = exports.melody = exports.cMinor = exports.cMajor = exports.rythm = exports.scaleSettings = exports.Note = exports.ScaleSettings = exports.random = undefined;
+    exports.createNotes = createNotes;
     exports.pickRandom = pickRandom;
     exports.normalDistribution = normalDistribution;
     exports.sigmoid = sigmoid;
     exports.toneReturnCoef = toneReturnCoef;
     exports.getMelody = getMelody;
     exports.getRythm = getRythm;
+    exports.detectHarmony = detectHarmony;
     exports.convertTone = convertTone;
 
     function _classCallCheck(instance, Constructor) {
@@ -39,6 +41,33 @@ define(["exports", "fable-core"], function (exports, _fableCore) {
     }();
 
     _fableCore.Util.setInterfaces(ScaleSettings.prototype, ["FSharpRecord", "System.IEquatable", "System.IComparable"], "GenSoundCore.ScaleSettings");
+
+    var Note = exports.Note = function () {
+        function Note(length, notes) {
+            _classCallCheck(this, Note);
+
+            this.Length = length;
+            this.Notes = notes;
+        }
+
+        Note.prototype.Equals = function Equals(other) {
+            return _fableCore.Util.equalsRecords(this, other);
+        };
+
+        Note.prototype.CompareTo = function CompareTo(other) {
+            return _fableCore.Util.compareRecords(this, other);
+        };
+
+        return Note;
+    }();
+
+    _fableCore.Util.setInterfaces(Note.prototype, ["FSharpRecord", "System.IEquatable", "System.IComparable"], "GenSoundCore.Note");
+
+    function createNotes(rythm, melody) {
+        return Array.from(_fableCore.Seq.map(function (tupledArg) {
+            return new Note(tupledArg[1], tupledArg[0]);
+        }, _fableCore.Seq.zip(melody, rythm)));
+    }
 
     function pickRandom(weights, elements) {
         var totalW = _fableCore.Seq.sum(weights);
@@ -98,8 +127,8 @@ define(["exports", "fable-core"], function (exports, _fableCore) {
                         }
                     }, _fableCore.Seq.map2(function (x, y) {
                         return x * y;
-                    }, allIntervalWeights, _fableCore.Seq.map(function (y) {
-                        return Math.pow(toneImportance, y);
+                    }, allIntervalWeights, _fableCore.Seq.map(function (x) {
+                        return Math.pow(x, toneImportance);
                     }, allToneWeights)))));
                     var resultTone = pickRandom(totalWeights, possibleTones);
                     return resultTone;
@@ -136,15 +165,25 @@ define(["exports", "fable-core"], function (exports, _fableCore) {
         }));
     }
 
-    function convertTone(key, tone) {
-        return key[(tone % key.length + key.length) % key.length] + 12 * ~~(tone / key.length);
+    function detectHarmony(melody, scaleSettings) {}
+
+    function convertTone(key, _arg1) {
+        return new Note(_arg1.Length, _arg1.Notes.map(function (tone) {
+            return key[(tone % key.length + key.length) % key.length] + 12 * ~~(tone / key.length);
+        }));
     }
 
     var scaleSettings = exports.scaleSettings = new ScaleSettings(new Float64Array([1, 5, 5, 3, 3, 0.7, 0.7, 1]), new Float64Array([1.7, 1.5, 1.6, 1, 1.6, 1.5, 1]));
     var rythm = exports.rythm = getRythm(4, 2.9, 3);
     var cMajor = exports.cMajor = new Int32Array([0, 2, 4, 5, 7, 9, 11]);
     var cMinor = exports.cMinor = new Int32Array([0, 2, 3, 5, 7, 8, 10]);
-    var melody = exports.melody = Int32Array.from(getMelody(rythm, scaleSettings, 20));
+
+    var melody = exports.melody = function (melody_1) {
+        return createNotes(rythm, melody_1);
+    }(_fableCore.Seq.map(function (x) {
+        return new Int32Array([x]);
+    }, getMelody(rythm, scaleSettings, 20)));
+
     var x = exports.x = 2 > 1 ? 2 : 1;
 });
 //# sourceMappingURL=GenSoundCore.js.map

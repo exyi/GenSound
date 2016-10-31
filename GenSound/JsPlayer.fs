@@ -26,18 +26,17 @@ let playStream notes speed =
         let names = [|"C"; "C#"; "D"; "D#"; "E"; "F"; "F#"; "G"; "G#"; "A"; "A#"; "B"|]
         (names.[num %% names.Length], num / names.Length + 3)
 
-    let times = notes |> Seq.map fst |> Seq.scan (+) 1.
-    for (time, (length, note)) in (notes |> Seq.zip times) do
-        noteOn 0 (note + 48) 128 (speed * time)
-        noteOff 0 (note + 48) (speed * (time + length))
- 
+    let times = notes |> Seq.map (fun x -> x.Length) |> Seq.scan (+) 1.
+    for (time, {Length=length; Notes= notes}) in (notes |> Seq.zip times) do
+        for note in notes do
+            noteOn 0 (note + 48) 128 (speed * time)
+            noteOff 0 (note + 48) (speed * (time + length))
+
 
 log melody
 
 let notes = melody 
             |> Seq.map (convertTone cMinor)
-            |> Seq.zip rythm
-
 
 init "acoustic_grand_piano" (fun () -> 
     log "piano loaded"

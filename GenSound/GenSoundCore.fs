@@ -5,6 +5,9 @@ let random = new System.Random()
 [<Emit("Math.random()")>]
 let randomReal () = random.NextDouble()
 type ScaleSettings  = { IntervalWeights: float array; ToneWeights: float array}
+type Note = { Length: float; Notes: int array }
+let createNotes rythm melody = Seq.zip melody rythm |> Seq.map (fun (m,r) -> { Length = r; Notes = m }) |> Seq.toArray
+
 
 let inline (%%) n m = ((n % m) + m) % m
 
@@ -31,7 +34,7 @@ let getMelody rythm scaleSettings toneRange =
                                                            scaleSettings.IntervalWeights.[interval])
         let allToneWeights = possibleTones |> Seq.map(fun i -> scaleSettings.ToneWeights.[i %% scaleSettings.ToneWeights.Length])
         let totalWeights = 
-            Seq.map2 (*) allIntervalWeights (allToneWeights |> Seq.map (( ** )toneImportance)) // multiply w_tone with w_interval, power to toneImportance
+            Seq.map2 (*) allIntervalWeights (allToneWeights |> Seq.map (fun x -> x ** toneImportance)) // multiply w_tone with w_interval, power to toneImportance
             |> Seq.mapi (fun i weight ->
                  let tone = possibleTones.[i]
                  if abs tone < abs previous then weight else weight * (toneReturnCoef (float (abs tone) / float toneRange))) // reduce probability of going too far from origin
@@ -60,8 +63,12 @@ let getRythm divCoef recursionCoef length =
                 |> List.map (fun l -> l / 2.0) // divide length by 2
     List.init length (fun i -> getTactRythm divCoef recursionCoef) |> List.collect id
 
-let convertTone (key: int array) tone =
-    key.[tone %% key.Length] + 12 * (tone / key.Length)
+let detectHarmony (melody: Note seq) scaleSettings =
+    let chords = [|0..scaleSettings.ToneWeights.Length - 2|] |> Array.map (fun x -> Array.map ((+)x) [|0;2;4|])
+    ()
+
+let convertTone (key: int array) {Length=len; Notes=notes} =
+    {Length=len; Notes = notes |> Array.map(fun tone -> key.[tone %% key.Length] + 12 * (tone / key.Length))}
 
 let scaleSettings = {
     IntervalWeights = [| 1.0; 5.0; 5.0; 3.0; 3.0; 0.7; 0.7; 1.0 |]
@@ -72,6 +79,6 @@ let rythm = getRythm 4.0 2.9 3
 let cMajor = [|0;2;4;5;7;9;11|]
 let cMinor = [|0;2;3;5;7;8;10|]
 
-let melody = getMelody rythm scaleSettings 20 |> Seq.toArray
+let melody = getMelody rythm scaleSettings 20 |> Seq.map (fun x -> [|x|]) |> createNotes rythm
 
 let x = max 2 1

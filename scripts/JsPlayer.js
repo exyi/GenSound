@@ -39,8 +39,8 @@ define(["exports", "fable-core", "./GenSoundCore"], function (exports, _fableCor
 
         var times = _fableCore.Seq.scan(function (x, y) {
             return x + y;
-        }, 1, _fableCore.Seq.map(function (tuple) {
-            return tuple[0];
+        }, 1, _fableCore.Seq.map(function (x) {
+            return x.Length;
         }, notes));
 
         var inputSequence = function (source2) {
@@ -60,20 +60,22 @@ define(["exports", "fable-core", "./GenSoundCore"], function (exports, _fableCor
             }
 
             var forLoopVar = _ref;
-            var note = forLoopVar[1][1];
-            var length = forLoopVar[1][0];
-            MIDI.noteOn(0, note + 48, 128, speed * forLoopVar[0]);
-            MIDI.noteOff(0, note + 48, speed * (forLoopVar[0] + length));
+            var notes_1 = forLoopVar[1].Notes;
+            var length = forLoopVar[1].Length;
+
+            for (var idx = 0; idx <= notes_1.length - 1; idx++) {
+                var note = notes_1[idx];
+                MIDI.noteOn(0, note + 48, 128, speed * forLoopVar[0]);
+                MIDI.noteOff(0, note + 48, speed * (forLoopVar[0] + length));
+            }
         }
     }
 
     console.log(_GenSoundCore.melody);
 
-    var notes = exports.notes = function (source2) {
-        return _fableCore.Seq.zip(_GenSoundCore.rythm, source2);
-    }(_fableCore.Seq.map(function (tone) {
-        return (0, _GenSoundCore.convertTone)(_GenSoundCore.cMinor, tone);
-    }, _GenSoundCore.melody));
+    var notes = exports.notes = _fableCore.Seq.map(function (arg10_) {
+        return (0, _GenSoundCore.convertTone)(_GenSoundCore.cMinor, arg10_);
+    }, _GenSoundCore.melody);
 
     MIDI.loadPlugin({
         instrument: "acoustic_grand_piano",
