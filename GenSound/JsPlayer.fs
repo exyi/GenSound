@@ -1,4 +1,8 @@
 ﻿module JsPlayer
+open Types
+open Func
+open Pattern
+open GenMusic
 open GenSoundCore
 open Fable.Core
 open Fable.Core.JsInterop
