@@ -35,12 +35,13 @@ let playStream notes speed =
 
 log melody
 
-let notes = melody 
-            |> Seq.map (convertTone cMinor)
+let notes = melody |> Array.map (convertTone cMinor)
+let chordNotes = chords |> Array.map (convertTone cMinor)
 
 init "acoustic_grand_piano" (fun () -> 
     log "piano loaded"
     playStream notes 2.0
+    playStream chordNotes 2.0
     )
 
 
