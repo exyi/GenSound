@@ -50,8 +50,26 @@ let getRythm divCoef recursionCoef length =
                 |> List.map (fun l -> l / 2.0) // divide length by 2
     List.init length (fun i -> getTactRythm divCoef recursionCoef) |> List.collect id
 
+let getSpeed (noteArray: Note array) =
+    let mutable speed = 0.
+    for i in 0 .. noteArray.Length-1 do
+        speed <- speed + noteArray.[i].Length
+    speed
+    
+let getPitch (noteArray: Note array) =
+    let mutable pitch = 0.
+    for i in 0 .. noteArray.Length-1 do
+        pitch <- pitch + Seq.averageBy (fun elem -> float elem) noteArray.[i].Notes
+    pitch
 
+let createPattern noteArray = { Pattern.Notes = noteArray; Pitch = getPitch noteArray ; Speed = getSpeed noteArray }
 
-let getPatterns scaleSettings size count =
-    let rythm = getRythm 4.0 2.9 size
-    List.init count (fun i -> getMelody rythm scaleSettings 20 |> Seq.map (fun x -> [|x|]) |> createNotes rythm)
+let getPatterns  scaleSettings count patternSettings =
+    let rythm = (getRythm patternSettings.divCoef patternSettings.recursionCoef
+                    (pickRandom patternSettings.Weights patternSettings.Length))
+    let Patterns = 
+        List.init count
+                (fun i -> getMelody rythm scaleSettings 20
+                        |> Seq.map (fun x -> [|x|]) |> createNotes rythm |> createPattern)
+    
+    Patterns

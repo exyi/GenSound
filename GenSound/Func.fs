@@ -11,7 +11,6 @@ let randomReal () = random.NextDouble()
 
 let createNotes rythm melody = Seq.zip melody rythm |> Seq.map (fun (m,r) -> { Length = r; Notes = m }) |> Seq.toArray
 
-
 let inline (%%) n m = ((n % m) + m) % m
 
 let pickRandom weights elements =
