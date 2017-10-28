@@ -6,9 +6,25 @@
 <body>
     <h1>GenSound</h1>
 
-    <div class="content">
+    <div class="content" id="app">
+        <div class="controls">
+	    <div class="generateOptions">
+	        <span>There will maybe appear some options.</span>
+	        <button> Generate New </button>
+	    </div>
+	    <div class="playbackOptions">
+	        <button @click="play()">PLAY</button>
+		<button @click="pause()">STOP</button>
+		IsPlaying: {{ Player.IsPlaying }}
+	    </div>
+	</div>
+	<div class="sheetDisplay">
+	    
+	</div>
     </div>
 
+	<script src="node_modules/vue/dist/vue.js"></script>
+	<script src="scripts/midi/jsmidgen.js"></script>
   <!--<script src="node_modules/core-js/client/core.min.js"></script>-->
   <script src="node_modules/requirejs/require.js"></script>
   <script src="scripts/inc/shim/Base64.js" type="text/javascript"></script>
@@ -35,18 +51,45 @@
 	<script src="scripts/inc/timer.js" type="text/javascript"></script>
 	<script src="scripts/inc/colorspace.js" type="text/javascript"></script>
 	<script src="scripts/inc/event.js" type="text/javascript"></script>
+	
+	<script>
+		function createMidiUrl(voices) {
+			var file = new Midi.File();
+			var track = new Midi.Track();
+            file.addTrack(track);
+            voices.forEach(function (voice) {
+				voice.forEach(function (note) {
+					// addChord (channel, chord, dur, velocity)
+					track.addChord(0, note.Notes, note.Length)
+				}
+			}
+	    }
 
-  <script>
-    requirejs.config({
-        // Set the baseUrl to the path of the compiled JS code
-        baseUrl: 'scripts',
-        paths: {
-            // Explicit path to core lib (relative to baseUrl, omit .js)
-            'fable-core': '../node_modules/fable-core/fable-core.min'
-        }
-    });
-    // Load the entry file of the app (use array, omit .js)
-    requirejs(["JsPlayer"]);
+		var base64 = btoa(file.toBytes());
+		return "data:audio/midi;base64," + base64;
+	</script>
+	<script>
+		requirejs.config({
+			// Set the baseUrl to the path of the compiled JS code
+			baseUrl: 'scripts',
+			paths: {
+				// Explicit path to core lib (relative to baseUrl, omit .js)
+				'fable-core': '../node_modules/fable-core/fable-core.min',
+				//'vue': '../node_modules/vue/dist/vue.js'
+
+			}
+		});
+		(function () {
+			// Load the entry file of the app (use array, omit .js)
+			var p = requirejs(["JsPlayer"]);
+			function applyViewModel(oldVM, newVM)
+			var app = new Vue("#app", {
+				data: p.createViewModel()
+				methods: {
+					
+				}
+			});
+		}());
   </script>
 </body>
 </html>

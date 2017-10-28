@@ -1,9 +1,10 @@
 ﻿// Learn more about F# at http://fsharp.org
 // See the 'F# Tutorial' project for more help.
+module Main
 open GenSoundCore
-open Pattern
-[<EntryPoint>]
+//[<EntryPoint>]
 let main argv = 
-    ignore melody
+    ignore (generateSound())
     printfn "%A" argv
     0 // return an integer exit code
+

@@ -6,11 +6,11 @@ open Types
 let getMelody rythm scaleSettings toneRange =
     let chooseTone previous toneImportance jumpBar =
 
-        let possibleTones = [-scaleSettings.IntervalWeights.Length + 1 + previous ..  
-                    scaleSettings.IntervalWeights.Length - 1 + previous]
+        let possibleTones = [-scaleSettings.JumpWeights.Length + 1 + previous ..  
+                    scaleSettings.JumpWeights.Length - 1 + previous]
         let allIntervalWeights = possibleTones |> Seq.map (fun tone ->
                                                            let interval = abs (tone - previous)
-                                                           scaleSettings.IntervalWeights.[interval])
+                                                           scaleSettings.JumpWeights.[interval])
         let allToneWeights = possibleTones |> Seq.map(fun i ->
                     scaleSettings.ToneWeights.[i %% scaleSettings.ToneWeights.Length])
         let totalWeights = 

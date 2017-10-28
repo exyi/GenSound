@@ -56,15 +56,17 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JsTypings/Vue.fs" />
     <Compile Include="AssemblyInfo.fs" />
     <None Include="App.config" />
     <Compile Include="Types.fs" />
     <Compile Include="Func.fs" />
     <Compile Include="Pattern.fs" />
+    <Compile Include="Harmony.fs" />
     <Compile Include="GenMusic.fs" />
     <Compile Include="GenSoundCore.fs" />
-    <Compile Include="JsPlayer.fs" />
     <Compile Include="Program.fs" />
+    <Compile Include="JsPlayer.fs" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>

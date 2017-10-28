@@ -1,5 +1,5 @@
 ﻿module Types
 
 
-type ScaleSettings  = { IntervalWeights: float array; ToneWeights: float array}
+type ScaleSettings  = { JumpWeights: float array; ToneWeights: float array; IntervalWeights: float array }
 type Note = { Length: float; Notes: int array }
